@@ -3,13 +3,11 @@ package com.cleaner.tvbox
 import android.app.Activity
 import android.app.ActivityManager
 import android.content.Context
-import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Environment
 import android.os.StatFs
-import android.provider.Settings
 import android.view.Gravity
 import android.widget.Button
 import android.widget.LinearLayout
@@ -24,7 +22,6 @@ class MainActivity : Activity() {
     private lateinit var txtStorage: TextView
     private lateinit var txtAppList: TextView
     private lateinit var btnLimpar: Button
-    private lateinit var btnPermissao: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +38,7 @@ class MainActivity : Activity() {
         }
 
         val txtTitle = TextView(this).apply {
-            text = "⚡ OTIMIZADOR TV BOX FORTE"
+            text = "⚡ OTIMIZADOR TV BOX"
             textSize = 20f
             setTypeface(null, Typeface.BOLD)
             setTextColor(Color.parseColor("#38BDF8"))
@@ -50,7 +47,7 @@ class MainActivity : Activity() {
         }
 
         txtStatus = TextView(this).apply {
-            text = "Modo de limpeza profunda pronto"
+            text = "Sistema pronto para otimização"
             textSize = 14f
             setTextColor(Color.parseColor("#F8FAFC"))
             gravity = Gravity.CENTER
@@ -72,31 +69,20 @@ class MainActivity : Activity() {
             setPadding(0, 5, 0, 15)
         }
 
-        btnPermissao = Button(this).apply {
-            text = "⚙️ ATIVAR PERMISSÃO FORTE"
-            textSize = 13f
-            setTextColor(Color.WHITE)
-            setBackgroundColor(Color.parseColor("#D97706"))
-            setPadding(15, 15, 15, 15)
-            setOnClickListener {
-                startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
-            }
-        }
-
         btnLimpar = Button(this).apply {
-            text = "🚀 FORÇAR PARADA E LIMPAR TUDO"
+            text = "🚀 EXECUTAR LIMPEZA DE MEMÓRIA"
             textSize = 15f
             setTypeface(null, Typeface.BOLD)
             setTextColor(Color.WHITE)
             setBackgroundColor(Color.parseColor("#DC2626"))
             setPadding(20, 20, 20, 20)
             setOnClickListener {
-                executarLimpezaProfunda()
+                executarLimpeza()
             }
         }
 
         txtAppList = TextView(this).apply {
-            text = "Toque no botão laranja para dar permissão e no vermelho para limpar."
+            text = "Toque no botão vermelho para limpar a RAM e encerrar processos em segundo plano."
             textSize = 12f
             setTextColor(Color.parseColor("#CBD5E1"))
             gravity = Gravity.START
@@ -107,7 +93,6 @@ class MainActivity : Activity() {
         layout.addView(txtStatus)
         layout.addView(txtRam)
         layout.addView(txtStorage)
-        layout.addView(btnPermissao)
         layout.addView(btnLimpar)
         layout.addView(txtAppList)
         scrollLayout.addView(layout)
@@ -139,7 +124,7 @@ class MainActivity : Activity() {
         txtStorage.text = lerArmazenamentoInterno()
     }
 
-    private fun executarLimpezaProfunda() {
+    private fun executarLimpeza() {
         val actManager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         val pm = packageManager
         val fechados = mutableListOf<String>()
@@ -158,7 +143,7 @@ class MainActivity : Activity() {
         }
 
         System.gc()
-        atualizarHardware("🔥 Limpeza profunda executada!")
+        atualizarHardware("✨ Limpeza concluída com sucesso!")
 
         txtAppList.text = if (fechados.isNotEmpty()) {
             "📦 Apps encerrados ($contador):\n• " + fechados.joinToString("\n• ")
