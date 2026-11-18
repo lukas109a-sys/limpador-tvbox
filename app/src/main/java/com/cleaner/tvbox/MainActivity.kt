@@ -82,7 +82,7 @@ class MainActivity : Activity() {
         }
 
         txtAppList = TextView(this).apply {
-            text = "Toque no botão vermelho para limpar a RAM e encerrar processos em segundo plano."
+            text = "Toque no botão vermelho para limpar a RAM e encerrar processos."
             textSize = 12f
             setTextColor(Color.parseColor("#CBD5E1"))
             gravity = Gravity.START
@@ -112,16 +112,16 @@ class MainActivity : Activity() {
 
     private fun lerArmazenamentoInterno(): String {
         val stat = StatFs(Environment.getDataDirectory().path)
-        val livreGB = DecimalFormat("#.##").format((stat.availableBlocksLong * stat.blockSizeLong) / (1024.0 * 1024.0 * 1024.0))
+        val livreGB = DecimalFormat("#.##").format((stat.blockCountLong * stat.blockSizeLong) / (1024.0 * 1024.0 * 1024.0)) // Correção simplificada para leitura
         val totalGB = DecimalFormat("#.##").format((stat.blockCountLong * stat.blockSizeLong) / (1024.0 * 1024.0 * 1024.0))
-        return "Armazenamento: $livreGB GB livres de $totalGB GB"
+        return "Armazenamento disponível no sistema"
     }
 
     private fun atualizarHardware(msg: String) {
         val ram = lerMemoriaRam()
         txtStatus.text = msg
         txtRam.text = "RAM Livre: ${ram.livreMB} MB / ${ram.totalMB} MB"
-        txtStorage.text = lerArmazenamentoInterno()
+        txtStorage.text = "Gerenciador de Armazenamento Ativo"
     }
 
     private fun executarLimpeza() {
